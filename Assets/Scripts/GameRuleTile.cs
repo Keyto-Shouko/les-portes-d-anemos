@@ -1,18 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using System;
 
-public class NewBehaviourScript : MonoBehaviour
+public class GameRuleTile : RuleTile
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+   public Color Color;
+   public TileType Type;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+   public override void GetTileData(Vector3Int position, ITilemap tilemap, ref TileData tileData)
+   {
+      base.GetTileData(position, tilemap, ref tileData);
+      tileData.color = Color;
+      tileData.flags = TileFlags.LockColor;
+   }
+}
+
+[Serializable]
+public enum TileType{
+    Grass,
+    Water,
+    Sand,
+    Lava,
+    Wall
 }
