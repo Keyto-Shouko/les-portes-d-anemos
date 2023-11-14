@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Tilemaps;
 using System;
 
+[CreateAssetMenu(fileName = "New Rule Tile", menuName = "Tiles/Rule Tile")]
 public class GameRuleTile : RuleTile
 {
    public Color Color;

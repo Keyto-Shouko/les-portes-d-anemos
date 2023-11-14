@@ -41,3 +41,33 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Elevation-2
+    uniqueID: 816870277
+    locked: 0
+  - name: Elevation-1
+    uniqueID: 4251500331
+    locked: 0
+  - name: Water
+    uniqueID: 3066296871
+    locked: 0
+  - name: Elevation-0
+    uniqueID: 1060379227
+    locked: 0
+  - name: Elevation+1
+    uniqueID: 4044943163
+    locked: 0
+  - name: Elevation+2
+    uniqueID: 2531457799
+    locked: 0
+  - name: New Layer 7
+    uniqueID: 1634028449
+    locked: 0
+  - name: New Layer 8
+    uniqueID: 1257021853
+    locked: 0
+  - name: Moutain+1
+    uniqueID: 1811527441
+    locked: 0
+  - name: Moutain+2
+    uniqueID: 4211220729
+    locked: 0
