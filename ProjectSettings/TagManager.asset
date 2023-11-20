@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Animals
+  - Trees
+  - NPCs
+  - LayerChanger
   layers:
   - Default
   - TransparentFX
@@ -11,11 +15,11 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Cave-2
+  - Cave-1
+  - Ground
+  - Upstair-1
+  - Upstair-2
   - 
   - 
   - 
@@ -40,6 +44,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Invisible
+    uniqueID: 406066591
     locked: 0
   - name: Elevation-2
     uniqueID: 816870277
