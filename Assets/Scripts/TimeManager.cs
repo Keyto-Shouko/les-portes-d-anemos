@@ -1,15 +1,18 @@
 using UnityEngine;
 using System;
+
+
 public class TimeManager : MonoBehaviour
 {
-    //duration of 1 game
-    public int duration = 20;
-
-    public float RemainingTime { get; private set; }
+    private GameManager _gameManager;
+    public float TimeElapsed { get; private set; }
+    private float _startTime;
+    public float CurrentTimeInDay { get; private set; }
+    
     private bool _isRunning = false;
     public event Action OnTimeUp;
     public void Reset(){
-        RemainingTime = duration;
+        //CurrentTimeInDay = duration;
     }
 
     public void StartGame(){
@@ -23,17 +26,24 @@ public class TimeManager : MonoBehaviour
     public void StopGame(){
         _isRunning = false;
     }
-
+    public float GetTimeElapsed(){
+        return TimeElapsed;
+    }
+    public void Awake(){
+        _startTime = Time.time;
+        _gameManager = GameManager.Instance;
+    }
     public void Update(){
-        if(!_isRunning){
+        /*if(!_isRunning){
             return;
-        }
-        RemainingTime -= Time.deltaTime;
-        if(RemainingTime <= 0){
-            RemainingTime = 0;
+        }*/
+       TimeElapsed = Time.time - _startTime;
+        /*CurrentTimeInDay -= Time.deltaTime;
+        if(CurrentTimeInDay <= 0){
+            CurrentTimeInDay = 0;
             StopGame();
-            OnTimeUp?.Invoke();
+            //OnTimeUp?.Invoke();
             //GameManager.Instance.StopGame();
-        }
+        }*/
     }
 }

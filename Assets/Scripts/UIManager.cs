@@ -1,4 +1,4 @@
-using TMPro;
+/*using TMPro;
 using UnityEngine;
 
 public class UIManager : MonoBehaviour
@@ -7,7 +7,7 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI bestScore;
     public TextMeshProUGUI time;
     public GameObject startButton;
-    private GameManager _gameManager;
+    //private GameManager _gameManager;
 
     private void Awake()
     {
@@ -30,3 +30,4 @@ public class UIManager : MonoBehaviour
         startButton.SetActive(true);
     }
 }
+*/
