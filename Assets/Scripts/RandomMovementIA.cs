@@ -1,47 +1,60 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class RandomMovementIA : MonoBehaviour
+public class RestrictedRandomMovement : MonoBehaviour
 {
+    public float maxRadius = 3f;
+    public float moveDistance = 1f;
+    public float updateInterval = 1f;
 
-    private Rigidbody2D _rigidbody2D;
-    private Vector3 _spawnPoint;
-    public float maxDistance = 5f;
-    public float intervalOfMovement = 5f;
-    public float speed = 4f;
-    private GameManager _gameManager;
-    private float _timeElapsed;
+    private Vector2 currentPosition;
+    private Vector2 spawnPoint;
+    private Vector2 targetPosition;
 
-    private void Awake(){
-        _gameManager = GameManager.Instance;
-        _rigidbody2D = GetComponent<Rigidbody2D>();
-        _spawnPoint = transform.position;
-        if(_gameManager == null){
-            Debug.Log("gameManager in RandomMovementIA is null");
-        }
-
-    }
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        var movement = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
-        _rigidbody2D.velocity = movement * speed;
+        // Set the initial spawn point
+        spawnPoint = transform.position;
+
+        // Start the repeating movement
+        InvokeRepeating("ChangeTargetPosition", 0f, updateInterval);
     }
-    
-    // Update is called once per frame
-    void Update()
+
+    private void Update()
     {
-        _timeElapsed = _gameManager.timeManager.GetTimeElapsed();
-        //cast _timeElapsed to int to make it easier to compare
-        //the object will move every time intervalOfMovement seconds
-        //the object has a square area of _spawnPoint +- maxDistance on both axis
-        //if the object's next position is outside of the square area, make it move to the opposite direction
-        //make the object move only ONCE every intervalOfMovement seconds
-        if(_timeElapsed % intervalOfMovement <= 0.1f){
-            Debug.Log(_timeElapsed);
-            var movement = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)).normalized;
-            _rigidbody2D.velocity = movement * speed;
-        }
+        // Move towards the target position
+        transform.position = Vector2.Lerp(transform.position, targetPosition, Time.deltaTime * 5f);
     }
+
+    private void ChangeTargetPosition()
+{
+    // Calculate a random point within the maxRadius
+    Vector2 randomDirection = Vector2.zero;
+
+    // A random between 0 and 1, if we are below 0.5f we will go only on X axis, otherwise on Y axis
+    if (Random.value < 0.5f)
+    {
+        // Another random to see if we will go + or - on the axis
+        randomDirection.x = Random.value < 0.5f ? 1f : -1f;
+    }
+    else
+    {
+        // Same as above
+        randomDirection.y = Random.value < 0.5f ? 1f : -1f;
+    }
+    // Now we check before moving if the new position will be outside the maxRadius
+    //log the random direction
+    Vector2 nextPosition = new Vector2(transform.position.x, transform.position.y) + randomDirection;
+    //log the distance
+    if (Vector2.Distance(spawnPoint, nextPosition) > maxRadius)
+    {
+        // If it is, we invert the direction
+        //log if we are inverting the direction
+        Debug.Log("Inverting the direction");
+        randomDirection *= -1f;
+        nextPosition = new Vector2(transform.position.x, transform.position.y) + randomDirection;
+    }
+
+    // Move towards the target position
+    targetPosition = nextPosition;
+}
 }
