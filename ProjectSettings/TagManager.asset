@@ -8,6 +8,7 @@ TagManager:
   - Trees
   - NPCs
   - LayerChanger
+  - Teleporters
   layers:
   - Default
   - TransparentFX

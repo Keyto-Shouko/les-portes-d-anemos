@@ -10,6 +10,7 @@ public class PlayerManager : MonoBehaviour
     // Singleton instance
     public static PlayerManager instance;
     public GameObject playerGameObject; // Reference to the player GameObject
+    //we need to listen to the teleporter event
     // Player data
     //public Inventory playerInventory;
     //public SkillTree playerSkillTree;
@@ -26,6 +27,13 @@ public class PlayerManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+    }
+
+    private void Start()
+    {
+         // Listen to the TeleporterEventManager
+        TeleporterEventManager.instance.onTeleporterDiscovered.AddListener(HandleTeleporterDiscover);    
     }
 
     public Vector3 GetCurrentPosition()
@@ -38,7 +46,13 @@ public class PlayerManager : MonoBehaviour
     public void SetCurrentPosition(Vector3 newPosition)
     {
         // Set the current position of the GameObject
-        Debug.Log("current position loaded : " + newPosition);
+        Debug.Log("current position loaded : " + newPosition); 
         playerGameObject.transform.position = newPosition;
+    }
+
+    private void HandleTeleporterDiscover(Teleporter discoveredTeleporter)
+    {
+        // Do something when the teleporter is discovered
+        Debug.Log("Teleporter discovered: " + discoveredTeleporter.name);    
     }
 }

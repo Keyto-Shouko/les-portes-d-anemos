@@ -2,17 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TeleporterData : MonoBehaviour
+[CreateAssetMenu(fileName = "TeleporterData", menuName = "Teleporter Data", order = 0)]
+public class TeleporterData : ScriptableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public AudioClip activationClip;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public string name;
+    public string description;
 }
