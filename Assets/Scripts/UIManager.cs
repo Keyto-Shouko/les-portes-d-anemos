@@ -1,13 +1,25 @@
-/*using TMPro;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
+using System;
+using TMPro;
 
 public class UIManager : MonoBehaviour
 {
     public TextMeshProUGUI score;
     public TextMeshProUGUI bestScore;
     public TextMeshProUGUI time;
-    public GameObject startButton;
-    //private GameManager _gameManager;
+    public GameObject menuPanel;
+    public GameObject controlsButton;
+    public GameObject audioButton;
+    
+    public GameObject saveButton;
+    public GameObject quitButton;
+    public GameObject backButton;
+    private GameManager _gameManager;
+
+    //create an event to save the game
+    public event EventHandler OnSave;
 
     private void Awake()
     {
@@ -17,17 +29,20 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        score.text = $"Score: {_gameManager.scoreManager.Score}";
+        /*score.text = $"Score: {_gameManager.scoreManager.Score}";
         bestScore.text = $"Best Score: {_gameManager.scoreManager.BestScore}";
-        time.text = $"Time: {Mathf.Ceil(_gameManager.timeManager.RemainingTime)}";
+        time.text = $"Time: {Mathf.Ceil(_gameManager.timeManager.RemainingTime)}";*/
     }
 
     public void StartGame(){
-        startButton.SetActive(false);
+        menuPanel.SetActive(false);
     }
 
     public void StopGame(){
-        startButton.SetActive(true);
+        menuPanel.SetActive(true);
+    }
+
+    public void closeMenu(){
+        menuPanel.SetActive(false);
     }
 }
-*/

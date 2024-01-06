@@ -7,10 +7,11 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector2 _movement;
     private Rigidbody2D _rigidbody2D;
-    //private Animator _animator;
+    private Animator _animator;
 
     [Range(5f, 20f)]
     public float speed = 10f;
+    private Vector2 _lastMoveDirection;
     private SpriteRenderer playerRenderer;
 
 
@@ -19,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
         Debug.Log("awake");
         _rigidbody2D = GetComponent<Rigidbody2D>();
         playerRenderer = GetComponent<SpriteRenderer>();
-        //_animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
     }
     // Start is called before the first frame update
     void Start()
@@ -30,12 +31,8 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        _movement = new Vector2(horizontal, vertical).normalized;
-        //_animator.SetFloat("Horizontal", horizontal);
-        //_animator.SetFloat("Vertical", vertical);
-        //_animator.SetFloat("Speed", _movement.sqrMagnitude);
+        ProcessMoveInputs();
+        Animate();
         //Debug.Log(_movement);
     }
 
@@ -45,6 +42,28 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
+    void ProcessMoveInputs()
+    {
+        // Get the input from the keyboard
+        float horizontal = Input.GetAxisRaw("Horizontal");
+        float vertical = Input.GetAxisRaw("Vertical");
+        // Normalize the input vector
+        _movement = new Vector2(horizontal, vertical).normalized;
+        //if we are not moving anymore, we need to update the last move direction
+        if (_movement != Vector2.zero)
+        {
+            _lastMoveDirection = _movement;
+        }
+    }
+
+    void Animate(){
+        // Update the animator parameters
+        _animator.SetFloat("Horizontal", _lastMoveDirection.x);
+        _animator.SetFloat("Vertical", _lastMoveDirection.y);
+        _animator.SetFloat("Speed", _movement.sqrMagnitude);
+        _animator.SetFloat("LastMoveHorizontal", _lastMoveDirection.x);
+        _animator.SetFloat("LastMoveVertical", _lastMoveDirection.y);
+    }
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("LayerChanger"))

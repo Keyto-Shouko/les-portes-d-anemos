@@ -5,7 +5,8 @@ public class RestrictedRandomMovement : MonoBehaviour
     public float maxRadius = 3f;
     public float moveDistance = 1f;
     public float updateInterval = 1f;
-
+     public float speed = 0f; // Added speed field
+    public Animator animator; // Added Animator field
     private Vector2 currentPosition;
     private Vector2 spawnPoint;
     private Vector2 targetPosition;
@@ -15,6 +16,9 @@ public class RestrictedRandomMovement : MonoBehaviour
         // Set the initial spawn point
         spawnPoint = transform.position;
 
+        // Get the Animator component
+        animator = GetComponent<Animator>();
+
         // Start the repeating movement
         InvokeRepeating("ChangeTargetPosition", 0f, updateInterval);
     }
@@ -23,6 +27,9 @@ public class RestrictedRandomMovement : MonoBehaviour
     {
         // Move towards the target position
         transform.position = Vector2.Lerp(transform.position, targetPosition, Time.deltaTime * 5f);
+
+        // Update animator parameters based on movement
+        UpdateAnimatorParameters();
     }
 
     private void ChangeTargetPosition()
@@ -57,4 +64,25 @@ public class RestrictedRandomMovement : MonoBehaviour
     // Move towards the target position
     targetPosition = nextPosition;
 }
+
+private void UpdateAnimatorParameters()
+    {
+        // Determine the direction of movement
+        float horizontal = targetPosition.x - transform.position.x;
+        float vertical = targetPosition.y - transform.position.y;
+        //check if the current position is different from the target position, if so we are moving
+        // if it's not we set the speed to 0
+        if (Vector2.Distance(transform.position, targetPosition) > 0.1f)
+        {
+            speed = 1;
+        } else {
+            speed = 0;
+        }
+        // Update Animator parameters
+        animator.SetFloat("Horizontal", horizontal);
+        animator.SetFloat("Vertical", vertical);
+        animator.SetFloat("LastMoveHorizontal", horizontal);
+        animator.SetFloat("LastMoveVertical", vertical);
+        animator.SetFloat("Speed", speed); // Added speed parameter
+    }
 }
