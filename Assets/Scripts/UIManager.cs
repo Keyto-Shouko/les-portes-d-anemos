@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 using TMPro;
 using System.Collections;
@@ -48,7 +49,8 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        
+        // get the gameManager
+        _gameManager = GameManager.Instance;
     }
 
     // Update is called once per frame
@@ -74,19 +76,50 @@ public class UIManager : MonoBehaviour
     public void AddTeleporterToUIList(Teleporter discoveredTeleporter){
         // Instantiate the teleporter UI item
         var newTeleporterToAdd = Instantiate(teleporterScrollViewItemPrefab);
+        Debug.Log("newTeleporterToAdd: " + discoveredTeleporter.GetPosition());
         // Set the instantiated item's parent to the content container
         newTeleporterToAdd.transform.SetParent(teleporterContainer);
-        TextMeshProUGUI nameTextField = newTeleporterToAdd.GetComponentInChildren<TextMeshProUGUI>(); // Replace with the correct reference
-        TextMeshProUGUI descriptionTextField = newTeleporterToAdd.GetComponentInChildren<TextMeshProUGUI>(); // Replace with the correct reference
-
+        TextMeshProUGUI[] textFields = newTeleporterToAdd.GetComponentsInChildren<TextMeshProUGUI>();
+        // Assuming the order of TextMeshProUGUI components in the array corresponds to the order in your prefab
         // Update the content of the TextMeshPro fields with the information from the discovered teleporter
-        nameTextField.text = discoveredTeleporter.name;
-        descriptionTextField.text = discoveredTeleporter.name;
+        textFields[0].text = discoveredTeleporter.name;  // First TextMeshProUGUI
+        textFields[1].text = discoveredTeleporter.description;  // Second TextMeshProUGUI
 
+        Button teleporterButton = newTeleporterToAdd.GetComponentInChildren<Button>();
+        if (teleporterButton != null)
+        {
+            teleporterButton.onClick.AddListener(() => OnTeleporterItemClick(discoveredTeleporter));
+        }
+        else
+        {
+            Debug.LogError("Button component not found on teleporter item.");
+        }
+
+    }
+
+    private void OnTeleporterItemClick(Teleporter clickedTeleporter)
+    {
+        // Handle teleporter item click
+        Debug.Log("Teleporter clicked: " + clickedTeleporter.name);
+
+        // Send an event to the GameManager to set the player's position
+        if (_gameManager != null)
+        {
+            _gameManager.playerManager.SetCurrentPosition(clickedTeleporter.GetPosition());
+        }
+        else
+        {
+            Debug.LogError("GameManager not found.");
+        }
     }
 
     public void ToggleTeleporterList(){
         // Open the teleporter list
         teleporterListPanel.SetActive(!teleporterListPanel.activeSelf);
+    }
+
+    public void CloseTeleporterList(){
+        // Close the teleporter list
+        teleporterListPanel.SetActive(false);
     }
 }

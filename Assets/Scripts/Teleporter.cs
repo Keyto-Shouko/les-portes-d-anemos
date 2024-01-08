@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+[Serializable]
 public class Teleporter : MonoBehaviour
 {
 
@@ -13,7 +13,12 @@ public class Teleporter : MonoBehaviour
     public string description;
     private Vector2 position;
     
-
+    public Teleporter(string name, string description, float positionX, float positionY)
+    {
+        this.name = name;
+        this.description = description;
+        this.position = new Vector2(positionX, positionY);
+    }
     void Awake()
     {
 
@@ -30,9 +35,18 @@ public class Teleporter : MonoBehaviour
         
     }
 
+    public SerializableTeleporter ToSerializableTeleporter()
+    {
+        return new SerializableTeleporter(name, description, position.x, position.y);
+    }
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.CompareTag("Player")){
-            TeleporterEventManager.instance.DiscoverTeleporter(this);
+            TeleporterEventManager.instance.DiscoverTeleporter(name, description, position.x, position.y);
         }
+    }
+
+    //acces the position of the teleporter
+    public Vector2 GetPosition(){
+        return position;
     }
 }

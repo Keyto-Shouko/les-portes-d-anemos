@@ -56,6 +56,8 @@ public class PlayerManager : MonoBehaviour
         // Do something when the teleporter is discovered
         // add the discovered teleporter to the list only if it's not already in the list
         if(!discoveredTeleporterList.Contains(discoveredTeleporter)){
+            Debug.Log("A new teleporter has been discovered!");
+            //create a new teleporter with the arguments
             discoveredTeleporterList.Add(discoveredTeleporter);
             OnAddTeleporterToUIList?.Invoke(discoveredTeleporter);
         }
@@ -70,5 +72,12 @@ public class PlayerManager : MonoBehaviour
         this.discoveredTeleporterList = discoveredTeleporterList;
     }
 
-    
+    public void TeleportToTeleporter(string teleporterName){
+        //we need to find the teleporter in the list of discovered teleporters
+        //we need to get the position of the teleporter
+        //we need to set the player's position to the teleporter's position
+        Teleporter teleporterToTeleportTo = discoveredTeleporterList.Find(teleporter => teleporter.name == teleporterName);
+        Vector3 teleporterPosition = teleporterToTeleportTo.GetPosition();
+        SetCurrentPosition(teleporterPosition);
+    }
 }

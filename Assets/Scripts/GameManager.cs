@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -125,14 +126,11 @@ public class GameManager : MonoBehaviour
 
         // Get the player's teleporter list from PlayerManager
         List<Teleporter> discoveredTeleporterList = playerManager.GetDiscoveredTeleporterList();
-        string teleporterListJson = JsonUtility.ToJson(discoveredTeleporterList);
+        
         PlayerPrefs.SetFloat("PlayerXCoordinates", playerPosition.x);
         PlayerPrefs.SetFloat("PlayerYCoordinates", playerPosition.y);
         PlayerPrefs.SetFloat("PlayerZCoordinates", playerPosition.z);
-        PlayerPrefs.SetString("TeleporterList", teleporterListJson);
-
         PlayerPrefs.Save();
-
         Debug.Log("Player data saved!");
     }
 
@@ -142,16 +140,7 @@ public class GameManager : MonoBehaviour
         float playerX = PlayerPrefs.GetFloat("PlayerXCoordinates");
         float playerY = PlayerPrefs.GetFloat("PlayerYCoordinates");
         float playerZ = PlayerPrefs.GetFloat("PlayerZCoordinates");
-        string teleporterListJson = PlayerPrefs.GetString("TeleporterList");
 
-        if (!string.IsNullOrEmpty(teleporterListJson))
-        {
-            // Deserialize the JSON string into a list of teleporters
-            List<Teleporter> loadedTeleporterList = JsonUtility.FromJson<List<Teleporter>>(teleporterListJson);
-
-            // Use the loaded teleporter list as needed, e.g., update your game state
-            playerManager.SetDiscoveredTeleporterList(loadedTeleporterList);
-        }
 
         Vector3 savedPosition = new Vector3(playerX, playerY, playerZ);
         // Set the player's position using SetCurrentPosition method

@@ -136,7 +136,7 @@ public class PlayerController : MonoBehaviour
         if (other.CompareTag("Teleporters"))
         {
             _isInTPArea = false;
-            UIManager.Instance.ToggleTeleporterList();
+            UIManager.Instance.CloseTeleporterList();
         }
     }
     void ChangePlayerLayer(GameObject player, string layerName, string sortingLayerName = "Default")
