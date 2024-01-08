@@ -14,6 +14,9 @@ public class PlayerManager : MonoBehaviour
     // Player data
     //public Inventory playerInventory;
     //public SkillTree playerSkillTree;
+    //we need a list of discovered teleporters
+    public List<Teleporter> discoveredTeleporterList = new List<Teleporter>();
+    public event Action<Teleporter> OnAddTeleporterToUIList;
 
     private void Awake()
     {
@@ -33,26 +36,39 @@ public class PlayerManager : MonoBehaviour
     private void Start()
     {
          // Listen to the TeleporterEventManager
-        TeleporterEventManager.instance.onTeleporterDiscovered.AddListener(HandleTeleporterDiscover);    
+        TeleporterEventManager.instance.onTeleporterDiscovered.AddListener(HandleTeleporterDiscover);   
     }
 
     public Vector3 GetCurrentPosition()
     {
         // Get the current position of the GameObject
-        Debug.Log("current position saved : " + playerGameObject.transform.position);
         return playerGameObject.transform.position;
     }
 
     public void SetCurrentPosition(Vector3 newPosition)
     {
         // Set the current position of the GameObject
-        Debug.Log("current position loaded : " + newPosition); 
         playerGameObject.transform.position = newPosition;
     }
 
     private void HandleTeleporterDiscover(Teleporter discoveredTeleporter)
     {
         // Do something when the teleporter is discovered
-        Debug.Log("Teleporter discovered: " + discoveredTeleporter.name);    
+        // add the discovered teleporter to the list only if it's not already in the list
+        if(!discoveredTeleporterList.Contains(discoveredTeleporter)){
+            discoveredTeleporterList.Add(discoveredTeleporter);
+            OnAddTeleporterToUIList?.Invoke(discoveredTeleporter);
+        }
     }
+
+    //We need a function to get and set the list of discovered teleporters so we can send it to the GameManager to save it
+    public List<Teleporter> GetDiscoveredTeleporterList(){
+        return discoveredTeleporterList;
+    }
+
+    public void SetDiscoveredTeleporterList(List<Teleporter> discoveredTeleporterList){
+        this.discoveredTeleporterList = discoveredTeleporterList;
+    }
+
+    
 }

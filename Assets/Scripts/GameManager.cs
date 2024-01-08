@@ -45,6 +45,10 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //timeManager.OnTimeUp += TimeUpHandler;
+        if (playerManager != null)
+        {
+            playerManager.OnAddTeleporterToUIList += HandleAddTeleporterToUIList;
+        }
     }
 
     private void TimeUpHandler(){
@@ -119,9 +123,13 @@ public class GameManager : MonoBehaviour
         // Get the player's current position from PlayerManager
         Vector3 playerPosition = playerManager.GetCurrentPosition();
 
+        // Get the player's teleporter list from PlayerManager
+        List<Teleporter> discoveredTeleporterList = playerManager.GetDiscoveredTeleporterList();
+        string teleporterListJson = JsonUtility.ToJson(discoveredTeleporterList);
         PlayerPrefs.SetFloat("PlayerXCoordinates", playerPosition.x);
         PlayerPrefs.SetFloat("PlayerYCoordinates", playerPosition.y);
         PlayerPrefs.SetFloat("PlayerZCoordinates", playerPosition.z);
+        PlayerPrefs.SetString("TeleporterList", teleporterListJson);
 
         PlayerPrefs.Save();
 
@@ -134,6 +142,16 @@ public class GameManager : MonoBehaviour
         float playerX = PlayerPrefs.GetFloat("PlayerXCoordinates");
         float playerY = PlayerPrefs.GetFloat("PlayerYCoordinates");
         float playerZ = PlayerPrefs.GetFloat("PlayerZCoordinates");
+        string teleporterListJson = PlayerPrefs.GetString("TeleporterList");
+
+        if (!string.IsNullOrEmpty(teleporterListJson))
+        {
+            // Deserialize the JSON string into a list of teleporters
+            List<Teleporter> loadedTeleporterList = JsonUtility.FromJson<List<Teleporter>>(teleporterListJson);
+
+            // Use the loaded teleporter list as needed, e.g., update your game state
+            playerManager.SetDiscoveredTeleporterList(loadedTeleporterList);
+        }
 
         Vector3 savedPosition = new Vector3(playerX, playerY, playerZ);
         // Set the player's position using SetCurrentPosition method
@@ -141,4 +159,11 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("Player data loaded!");
     }
+
+    private void HandleAddTeleporterToUIList(Teleporter discoveredTeleporter)
+    {
+        // Your logic to handle the event in the GameManager
+        UIManagerComponent.AddTeleporterToUIList(discoveredTeleporter);
+    }
+
 }

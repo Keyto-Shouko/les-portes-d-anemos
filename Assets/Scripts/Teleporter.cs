@@ -11,7 +11,7 @@ public class Teleporter : MonoBehaviour
     public AudioClip activationClip;
     public string name;
     public string description;
-    private Vector2 _position;
+    private Vector2 position;
     
 
     void Awake()
@@ -21,7 +21,7 @@ public class Teleporter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _position = transform.position;
+        position = transform.position;
     }
 
     // Update is called once per frame
@@ -33,7 +33,6 @@ public class Teleporter : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.CompareTag("Player")){
             TeleporterEventManager.instance.DiscoverTeleporter(this);
-            Debug.Log("Teleporter event invoked");
         }
     }
 }

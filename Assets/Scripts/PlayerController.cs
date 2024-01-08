@@ -11,34 +11,35 @@ public class PlayerController : MonoBehaviour
     [Range(5f, 20f)]
     public float speed = 10f;
     private Vector2 _lastMoveDirection;
-    private SpriteRenderer playerRenderer;
-    // Reference to the player manager
-    //private PlayerManager playerManager;
+    private SpriteRenderer _playerRenderer;
+    //Reference to the player manager
+
+    private bool _isInTPArea = false;
+    private PlayerManager _playerManager;
 
     private void Awake()
     {
-        Debug.Log("awake");
         _rigidbody2D = GetComponent<Rigidbody2D>();
-        playerRenderer = GetComponent<SpriteRenderer>();
+        _playerRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
-        // Reference the PlayerManager script on the same GameObject
-        //playerManager = GetComponent<PlayerManager>();
-        // Debug log to check if playerManager is assigned
+        
+        // Debug log to check if _playerManager is assigned
     }
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("start");
+        //reference the PlayerManager, it's present in the gameManager
+        _playerManager = GameManager.Instance.playerManager;
     }
 
     // Update is called once per frame
     void Update()
     {
-        ProcessMoveInputs();
+        ProcessInputs();
         Animate();
-        // Get the player's current position and send it to PlayerManager
+        // Get the player's current position and send it to _playerManager
         //Vector3 currentPosition = transform.position;
-        //playerManager.SetCurrentPosition(currentPosition);
+        //_playerManager.SetCurrentPosition(currentPosition);
     }
 
     private void FixedUpdate()
@@ -48,7 +49,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void ProcessMoveInputs()
+    void ProcessInputs()
     {
         // Get the input from the keyboard
         float horizontal = Input.GetAxisRaw("Horizontal");
@@ -59,6 +60,13 @@ public class PlayerController : MonoBehaviour
         if (_movement != Vector2.zero)
         {
             _lastMoveDirection = _movement;
+        }
+
+        //if the player is in the teleporter area and press F, we need to send an event to the teleporter event manager
+        if (_isInTPArea && Input.GetKeyDown(KeyCode.F))
+        {
+            // Make the UIManager open the teleporter list
+            UIManager.Instance.ToggleTeleporterList();
         }
 
     }
@@ -74,7 +82,6 @@ public class PlayerController : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("LayerChanger"))
-        {
         {
             string currentLayer = LayerMask.LayerToName(gameObject.layer);
             // Change the layer based on the conditions and movement direction
@@ -117,14 +124,27 @@ public class PlayerController : MonoBehaviour
                 ChangePlayerLayer(gameObject, "Ground");
             }
         }
+        //When the player enters the teleporter area, if he presses the F key,
+        else if(other.gameObject.CompareTag("Teleporters")){
+            _isInTPArea = true;
+        }
+
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Teleporters"))
+        {
+            _isInTPArea = false;
+            UIManager.Instance.ToggleTeleporterList();
         }
     }
     void ChangePlayerLayer(GameObject player, string layerName, string sortingLayerName = "Default")
     {
         player.layer = LayerMask.NameToLayer(layerName);
         // Update the sorting layer of the sprite renderer (assuming your player has a SpriteRenderer component)
-        if (playerRenderer != null){
-            playerRenderer.sortingLayerName = sortingLayerName;
+        if (_playerRenderer != null){
+            _playerRenderer.sortingLayerName = sortingLayerName;
         }
     }
 
