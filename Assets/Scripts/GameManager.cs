@@ -123,10 +123,6 @@ public class GameManager : MonoBehaviour
 
         // Get the player's current position from PlayerManager
         Vector3 playerPosition = playerManager.GetCurrentPosition();
-
-        // Get the player's teleporter list from PlayerManager
-        List<Teleporter> discoveredTeleporterList = playerManager.GetDiscoveredTeleporterList();
-        
         PlayerPrefs.SetFloat("PlayerXCoordinates", playerPosition.x);
         PlayerPrefs.SetFloat("PlayerYCoordinates", playerPosition.y);
         PlayerPrefs.SetFloat("PlayerZCoordinates", playerPosition.z);
@@ -145,7 +141,6 @@ public class GameManager : MonoBehaviour
         Vector3 savedPosition = new Vector3(playerX, playerY, playerZ);
         // Set the player's position using SetCurrentPosition method
         playerManager.SetCurrentPosition(savedPosition);
-
         Debug.Log("Player data loaded!");
     }
 

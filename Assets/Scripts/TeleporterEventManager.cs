@@ -24,10 +24,8 @@ public class TeleporterEventManager : MonoBehaviour
     }
 
     // Function to call when a teleporter is discovered
-    public void DiscoverTeleporter(string name, string description, float x, float y)
+    public void DiscoverTeleporter(Teleporter discoveredTeleporter)
     {
-        //create a new teleporter with the arguments
-        Teleporter discoveredTeleporter = new Teleporter(name, description, x, y);
         onTeleporterDiscovered.Invoke(discoveredTeleporter);
     }
 

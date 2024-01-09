@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour
     //Reference to the player manager
 
     private bool _isInTPArea = false;
+
+    private bool _canCollect = false;
     private PlayerManager _playerManager;
 
     private void Awake()
@@ -129,6 +131,10 @@ public class PlayerController : MonoBehaviour
             _isInTPArea = true;
         }
 
+        else if(other.gameObject.CompareTag("Collectible")){
+            _canCollect = true;
+        }
+
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -138,6 +144,16 @@ public class PlayerController : MonoBehaviour
             _isInTPArea = false;
             UIManager.Instance.CloseTeleporterList();
         }
+        else if(other.gameObject.CompareTag("Collectible")){
+            _canCollect = false;
+        }
+    }
+
+    void OnTriggerStay2D(Collider2D other)
+    {
+        /*if(other.gameObject.CompareTag("Collectible") && KeyDown(KeyCode.F)){
+            //_playerManager.CollectItem(other.gameObject);
+        }*/
     }
     void ChangePlayerLayer(GameObject player, string layerName, string sortingLayerName = "Default")
     {

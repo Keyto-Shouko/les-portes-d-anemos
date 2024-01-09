@@ -80,4 +80,9 @@ public class PlayerManager : MonoBehaviour
         Vector3 teleporterPosition = teleporterToTeleportTo.GetPosition();
         SetCurrentPosition(teleporterPosition);
     }
+
+    /*public void CollectItem(GameObject item){
+        //we need to remove the item from the scene
+        //item
+    }*/
 }

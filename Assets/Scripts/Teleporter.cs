@@ -13,12 +13,6 @@ public class Teleporter : MonoBehaviour
     public string description;
     private Vector2 position;
     
-    public Teleporter(string name, string description, float positionX, float positionY)
-    {
-        this.name = name;
-        this.description = description;
-        this.position = new Vector2(positionX, positionY);
-    }
     void Awake()
     {
 
@@ -35,13 +29,9 @@ public class Teleporter : MonoBehaviour
         
     }
 
-    public SerializableTeleporter ToSerializableTeleporter()
-    {
-        return new SerializableTeleporter(name, description, position.x, position.y);
-    }
     private void OnTriggerEnter2D(Collider2D other) {
         if(other.gameObject.CompareTag("Player")){
-            TeleporterEventManager.instance.DiscoverTeleporter(name, description, position.x, position.y);
+            TeleporterEventManager.instance.DiscoverTeleporter(this);
         }
     }
 
