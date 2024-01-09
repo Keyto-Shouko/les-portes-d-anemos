@@ -9,12 +9,14 @@ public class InventoryManager : MonoBehaviour
 
     public int inventorySize = 10;
 
-    private void Start()
+    void Start()
     {
+        Debug.Log("InventoryManager Start");
         inventoryUI.InitializeInvetoryUI(inventorySize);
     }
 
-    public void update(){
+    void Update(){
+        Debug.Log("InventoryManager update");
         if(Input.GetKeyDown(KeyCode.I)){
             Debug.Log("I key pressed");
             if(inventoryUI.gameObject.activeSelf){
