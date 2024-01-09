@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using system;
+using System;
 
 [CreateAssetMenu(fileName = "InventorySO", menuName = "Inventory SO", order = 0)]
 public class InventorySO : ScriptableObject
 {
     [SerializeField]
-    private List<InventoryItem> _inventoryItems = inventoryItems;
+    private List<InventoryItem> _inventoryItems;
 
     [field : SerializeField]
     public int Size { get; set; } = 10;
@@ -33,8 +33,7 @@ public class InventorySO : ScriptableObject
     public Dictionary<int, InventoryItem> GetInventoryState(){
         Dictionary<int, InventoryItem> returnValue = new Dictionary<int, InventoryItem>();
         for(int i = 0; i < _inventoryItems.Count; i++){
-            if(_inventoryItems[i].IsEmpty)
-                continue;
+            if(_inventoryItems[i].IsEmpty) continue;
             returnValue[i] = _inventoryItems[i];
         }
         return returnValue;
@@ -56,10 +55,9 @@ public struct InventoryItem
         };
     }
 
-    public static InventoryItem GetEmptyItem(){
+    public static InventoryItem GetEmptyItem()
         => new InventoryItem{
             item = null,
             quantity = 0
         };
-    }
 }

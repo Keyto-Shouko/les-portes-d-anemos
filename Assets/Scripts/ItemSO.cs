@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ItemSO", menuName = "Item SO", order = 0)]
-public class Item : ScriptableObject
+public class ItemSO : ScriptableObject
 {
     [field : SerializeField]
     public bool isStackable { get; set; }
