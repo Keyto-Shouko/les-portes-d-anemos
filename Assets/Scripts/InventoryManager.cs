@@ -11,14 +11,11 @@ public class InventoryManager : MonoBehaviour
 
     void Start()
     {
-        Debug.Log("InventoryManager Start");
         inventoryUI.InitializeInvetoryUI(inventorySize);
     }
 
     void Update(){
-        Debug.Log("InventoryManager update");
         if(Input.GetKeyDown(KeyCode.I)){
-            Debug.Log("I key pressed");
             if(inventoryUI.gameObject.activeSelf){
                 inventoryUI.HideInventory();
             }else{

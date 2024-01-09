@@ -396,6 +396,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemPrefab: {fileID: 1416157876886139541, guid: 53bbdcad3e22f8448b156b3288bc5081, type: 3}
   contentPanel: {fileID: 7016931133458213445}
+  itemDescription: {fileID: 3014349567246946447}
+  image: {fileID: 793172594, guid: a03c2610221b14940b818fb271b448fa, type: 3}
+  quantity: 1
+  title: Banana
+  description: Delicious banana
 --- !u!1 &2181008201344483524
 GameObject:
   m_ObjectHideFlags: 0
@@ -691,6 +696,7 @@ GameObject:
   - component: {fileID: 2656897430414189922}
   - component: {fileID: 5346916022460557778}
   - component: {fileID: 5694880352286571639}
+  - component: {fileID: 3014349567246946447}
   m_Layer: 5
   m_Name: InventoryDescription
   m_TagString: Untagged
@@ -803,6 +809,21 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &3014349567246946447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3303266333138409939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6bda453594e2fc74ea77e6606db2e571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _itemImage: {fileID: 3540100452092468077}
+  _title: {fileID: 5176746473522499379}
+  _description: {fileID: 1749874792679536871}
 --- !u!1 &3536489842496930998
 GameObject:
   m_ObjectHideFlags: 0
@@ -960,7 +981,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 8786183891296096159}
   m_Direction: 2
   m_Value: 1
-  m_Size: 1
+  m_Size: 0.99999994
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
