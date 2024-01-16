@@ -20,7 +20,7 @@ public class UIInventoryPage : MonoBehaviour
 
     private int _currentlyDraggedItemIndex = -1;
 
-    public event Action<int> OnDescriptionRequested, onItemActionRequested, onStartDragging;
+    public event Action<int> OnDescriptionRequested, OnItemActionRequested, OnStartDragging;
 
     public event Action<int, int> OnSwapItems;
     void Awake(){
@@ -60,7 +60,7 @@ public class UIInventoryPage : MonoBehaviour
 
     }
 
-    private void ResetSelection(){
+    public void ResetSelection(){
         itemDescription.ResetDescription();
         DeselectAllItems();
     }
@@ -77,7 +77,7 @@ public class UIInventoryPage : MonoBehaviour
         if(index == -1) return;
         _currentlyDraggedItemIndex = index;
         HandleItemSelection(inventoryItemUI);
-       onStartDragging?.Invoke(index);
+       OnStartDragging?.Invoke(index);
     }
 
     private void HandleSwap(UIInventoryItem inventoryItemUI){
@@ -87,6 +87,7 @@ public class UIInventoryPage : MonoBehaviour
             return;
         }
         OnSwapItems?.Invoke(_currentlyDraggedItemIndex, index);
+        HandleItemSelection(inventoryItemUI);
     }
 
     private void HandleEndDrag(UIInventoryItem inventoryItemUI){
@@ -99,14 +100,32 @@ public class UIInventoryPage : MonoBehaviour
         _currentlyDraggedItemIndex = -1;
     }
 
-    private void CreateDraggedItem(Sprite sprite, int quantity){
+    public void CreateDraggedItem(Sprite sprite, int quantity){
         mouseFollower.Toggle(true);
         mouseFollower.SetData(sprite, quantity);
     }
-    private void UpdateData(int itemIndex, Sprite sprite, int itemQuantity){
+
+    public void DestroyDraggedItem(){
+        mouseFollower.Toggle(false);
+    }
+    public void UpdateData(int itemIndex, Sprite sprite, int itemQuantity){
         if(listOfUIItems.Count > itemIndex) listOfUIItems[itemIndex].SetData(sprite, itemQuantity);
     }
     private void HandleRShowItemActions(UIInventoryItem inventoryItemUI){
         //Debug.Log("Item right click");
+    }
+
+    internal void UpdateDescription(int itemIndex, Sprite itemImage, string name, string description)
+    {
+        itemDescription.SetDescription(itemImage, name, description);
+        DeselectAllItems();
+        listOfUIItems[itemIndex].Select();
+    }
+
+    public void ResetAllItems(){
+        foreach(UIInventoryItem item in listOfUIItems){
+            item.ResetData();
+            item.Deselect();
+        }
     }
 }
