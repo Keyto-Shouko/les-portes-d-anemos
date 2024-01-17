@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     private bool _canCollect = false;
     private PlayerManager _playerManager;
 
+    [SerializeField]
+    private InventorySO inventoryData;
+
     private void Awake()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -131,8 +134,17 @@ public class PlayerController : MonoBehaviour
             _isInTPArea = true;
         }
 
-        else if(other.gameObject.CompareTag("Collectible")){
-            _canCollect = true;
+        else if(other.gameObject.CompareTag("Collectibles")){
+           Item item = other.GetComponent<Item>();
+           if(item != null){
+                int reminder = inventoryData.AddItem(item.InventoryItem, item.Quantity);
+                if(reminder == 0){
+                    item.DestroyItem();
+                }
+                else{
+                    item.Quantity = reminder;
+                }
+           }
         }
 
     }
@@ -143,9 +155,6 @@ public class PlayerController : MonoBehaviour
         {
             _isInTPArea = false;
             UIManager.Instance.CloseTeleporterList();
-        }
-        else if(other.gameObject.CompareTag("Collectible")){
-            _canCollect = false;
         }
     }
 

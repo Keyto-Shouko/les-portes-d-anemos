@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b93847ca64830ef46b2ad40ea45d81f9, type: 3}
   m_Name: Banana
   m_EditorClassIdentifier: 
-  <isStackable>k__BackingField: 1
+  <IsStackable>k__BackingField: 1
   <MaxStackSize>k__BackingField: 10
   <Name>k__BackingField: Banana
   <Description>k__BackingField: Delicious banana

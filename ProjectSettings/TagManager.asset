@@ -9,6 +9,7 @@ TagManager:
   - NPCs
   - LayerChanger
   - Teleporters
+  - Collectibles
   layers:
   - Default
   - TransparentFX

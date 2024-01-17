@@ -6,7 +6,7 @@ using UnityEngine;
 public class ItemSO : ScriptableObject
 {
     [field : SerializeField]
-    public bool isStackable { get; set; }
+    public bool IsStackable { get; set; }
 
     public int ID => GetInstanceID();
 
