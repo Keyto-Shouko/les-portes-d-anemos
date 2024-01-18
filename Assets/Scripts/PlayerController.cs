@@ -19,6 +19,20 @@ public class PlayerController : MonoBehaviour
     private bool _canCollect = false;
     private PlayerManager _playerManager;
 
+    private AudioSource _audioSource;
+
+    [SerializeField]
+    private List<AudioClipEntry> audioClipEntries;
+
+    private Dictionary<string, AudioClip> audioClipDictionary;
+
+    [System.Serializable]
+    public class AudioClipEntry
+    {
+        public string clipName;
+        public AudioClip clip;
+    }
+
     [SerializeField]
     private InventorySO inventoryData;
 
@@ -27,6 +41,14 @@ public class PlayerController : MonoBehaviour
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _playerRenderer = GetComponent<SpriteRenderer>();
         _animator = GetComponent<Animator>();
+        _audioSource = GetComponent<AudioSource>();
+
+        // Initialize the dictionary from the list
+        audioClipDictionary = new Dictionary<string, AudioClip>();
+        foreach (var entry in audioClipEntries)
+        {
+            audioClipDictionary[entry.clipName] = entry.clip;
+        }
         
         // Debug log to check if _playerManager is assigned
     }
@@ -146,7 +168,13 @@ public class PlayerController : MonoBehaviour
                 }
            }
         }
-
+        //detect if player enters the "spawnArea" and play the sound
+        else if(other.gameObject.CompareTag("SpawnArea")){
+            PlayAudioClip("SpawnAmbiance");
+        }
+        else if (other.gameObject.CompareTag("ForestArea")){
+            PlayAudioClip("ForestAmbiance");
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -170,6 +198,16 @@ public class PlayerController : MonoBehaviour
         // Update the sorting layer of the sprite renderer (assuming your player has a SpriteRenderer component)
         if (_playerRenderer != null){
             _playerRenderer.sortingLayerName = sortingLayerName;
+        }
+    }
+
+    void PlayAudioClip(string clipName)
+    {
+        if (_audioSource != null && audioClipDictionary.ContainsKey(clipName))
+        {
+            AudioClip clip = audioClipDictionary[clipName];
+            _audioSource.clip = clip;
+            _audioSource.Play();
         }
     }
 

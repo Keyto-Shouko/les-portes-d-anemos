@@ -10,6 +10,8 @@ TagManager:
   - LayerChanger
   - Teleporters
   - Collectibles
+  - SpawnArea
+  - ForestArea
   layers:
   - Default
   - TransparentFX
