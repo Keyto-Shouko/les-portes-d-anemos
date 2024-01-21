@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
 
     // Reference to the player manager
     public PlayerManager playerManager { get; private set; }
+
     private bool _isPaused = false;
     private void Awake()
     {
@@ -142,6 +143,10 @@ public class GameManager : MonoBehaviour
         // Set the player's position using SetCurrentPosition method
         playerManager.SetCurrentPosition(savedPosition);
         Debug.Log("Player data loaded!");
+    }
+
+    public void QuitGame(){
+        Application.Quit();
     }
 
     private void HandleAddTeleporterToUIList(Teleporter discoveredTeleporter)

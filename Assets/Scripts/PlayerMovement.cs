@@ -10,7 +10,10 @@ public class PlayerMovement : MonoBehaviour
     private Animator _animator;
 
     [Range(5f, 20f)]
-    public float speed = 10f;
+    public float speed = 5f;
+
+    private bool _canDash = true;
+    private float _dashCooldown = 6f;
     private Vector2 _lastMoveDirection;
     private SpriteRenderer playerRenderer;
 
@@ -44,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
 
     void ProcessMoveInputs()
     {
+        Debug.Log("process move inputs");
         // Get the input from the keyboard
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
@@ -53,6 +57,13 @@ public class PlayerMovement : MonoBehaviour
         if (_movement != Vector2.zero)
         {
             _lastMoveDirection = _movement;
+        }
+
+        // if the player press the space bar, we make it dash in the direction it is facing
+        if (Input.GetKeyDown(KeyCode.Space) && _canDash)
+        {
+            Debug.Log("Dash");
+            StartCoroutine(Dash(_lastMoveDirection));
         }
     }
 
@@ -119,6 +130,23 @@ public class PlayerMovement : MonoBehaviour
         if (playerRenderer != null){
             playerRenderer.sortingLayerName = sortingLayerName;
         }
+    }
+
+    IEnumerator Dash(Vector2 direction)
+    {
+        _canDash = false;
+
+        // Perform dash logic (e.g., change velocity, add force, etc.)
+        _rigidbody2D.velocity = direction * (speed * 2f);
+
+        yield return new WaitForSeconds(0.2f); // Adjust the duration of the dash
+
+        // Reset velocity after dash
+        _rigidbody2D.velocity = Vector2.zero;
+
+        yield return new WaitForSeconds(_dashCooldown);
+
+        _canDash = true;
     }
 
 }

@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     private bool _isInTPArea = false;
 
     private bool _canCollect = false;
+    private bool _canDash = true;
+    private float _dashCooldown = 6f;
+    private float _dashSpeed = 14f;
     private PlayerManager _playerManager;
 
     private AudioSource _audioSource;
@@ -71,9 +74,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _rigidbody2D.velocity = _movement * speed;
-        
-
+        Move();
     }
 
     void ProcessInputs()
@@ -88,6 +89,11 @@ public class PlayerController : MonoBehaviour
         {
             _lastMoveDirection = _movement;
         }
+        if (Input.GetKeyDown(KeyCode.Space) && _canDash)
+        {
+            Debug.Log("Dash");
+            StartCoroutine(Dash(_lastMoveDirection));
+        }
 
         //if the player is in the teleporter area and press F, we need to send an event to the teleporter event manager
         if (_isInTPArea && Input.GetKeyDown(KeyCode.F))
@@ -95,9 +101,13 @@ public class PlayerController : MonoBehaviour
             // Make the UIManager open the teleporter list
             UIManager.Instance.ToggleTeleporterList();
         }
+        
 
     }
-
+    void Move()
+    {
+        _rigidbody2D.velocity = _movement * speed;
+    }
     void Animate(){
         // Update the animator parameters
         _animator.SetFloat("Horizontal", _lastMoveDirection.x);
@@ -209,6 +219,24 @@ public class PlayerController : MonoBehaviour
             _audioSource.clip = clip;
             _audioSource.Play();
         }
+    }
+
+    IEnumerator Dash(Vector2 direction)
+    {
+        _canDash = false;
+
+        // Perform dash logic (e.g., change velocity, add force, etc.)
+        var previousSpeed = speed;
+        speed = _dashSpeed;
+
+        yield return new WaitForSeconds(0.2f); // Adjust the duration of the dash
+
+        // Reset velocity after dash
+        speed = previousSpeed;
+
+        yield return new WaitForSeconds(_dashCooldown);
+
+        _canDash = true;
     }
 
 }
