@@ -185,6 +185,14 @@ public class PlayerController : MonoBehaviour
         else if (other.gameObject.CompareTag("ForestArea")){
             PlayAudioClip("ForestAmbiance");
         }
+
+        //detect if player enters the slime hitbox and damage the player
+        else if(other.gameObject.CompareTag("Slime")){
+            HealthManager healthManager = GetComponent<HealthManager>();
+            if(healthManager != null){
+                healthManager.GetHealthSystem().Damage(10);
+            }
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
