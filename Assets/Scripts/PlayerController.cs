@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour
     [Range(5f, 20f)]
     public float speed = 10f;
     private Vector2 _lastMoveDirection;
+
+    private bool _isSlashing = false;
+    private bool _isDashing = false;
     private SpriteRenderer _playerRenderer;
     //Reference to the player manager
 
@@ -19,7 +22,10 @@ public class PlayerController : MonoBehaviour
     private bool _canCollect = false;
     private bool _canDash = true;
     private float _dashCooldown = 6f;
-    private float _dashSpeed = 14f;
+    private float _dashSpeed = 10f;
+
+    private bool _canAttack = true;
+    public float _attackCooldown = 0.6f;
     private PlayerManager _playerManager;
 
     private AudioSource _audioSource;
@@ -80,19 +86,28 @@ public class PlayerController : MonoBehaviour
     void ProcessInputs()
     {
         // Get the input from the keyboard
-        float horizontal = Input.GetAxisRaw("Horizontal");
-        float vertical = Input.GetAxisRaw("Vertical");
-        // Normalize the input vector
-        _movement = new Vector2(horizontal, vertical).normalized;
+        if(_isDashing == false && _isSlashing == false){
+            float horizontal = Input.GetAxisRaw("Horizontal");
+            float vertical = Input.GetAxisRaw("Vertical");
+            // Normalize the input vector
+             _movement = new Vector2(horizontal, vertical).normalized;
+        }
+        
         //if we are not moving anymore, we need to update the last move direction
         if (_movement != Vector2.zero)
         {
             _lastMoveDirection = _movement;
         }
-        if (Input.GetKeyDown(KeyCode.Space) && _canDash)
+        if (Input.GetKeyDown(KeyCode.Space) && _canDash && _isSlashing == false)
         {
             Debug.Log("Dash");
             StartCoroutine(Dash(_lastMoveDirection));
+
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _canAttack && _movement == Vector2.zero && _lastMoveDirection != Vector2.zero && _isDashing == false && _isSlashing == false)
+        {
+            StartCoroutine(Attack());
         }
 
         //if the player is in the teleporter area and press F, we need to send an event to the teleporter event manager
@@ -115,6 +130,8 @@ public class PlayerController : MonoBehaviour
         _animator.SetFloat("Speed", _movement.sqrMagnitude);
         _animator.SetFloat("LastMoveHorizontal", _lastMoveDirection.x);
         _animator.SetFloat("LastMoveVertical", _lastMoveDirection.y);
+        _animator.SetBool("IsSlashing", _isSlashing);
+        _animator.SetBool("IsDashing", _isDashing);
     }
     void OnTriggerEnter2D(Collider2D other)
     {
@@ -232,19 +249,44 @@ public class PlayerController : MonoBehaviour
     IEnumerator Dash(Vector2 direction)
     {
         _canDash = false;
+        _isDashing = true;
 
-        // Perform dash logic (e.g., change velocity, add force, etc.)
-        var previousSpeed = speed;
-        speed = _dashSpeed;
+        float elapsedTime = 0f;
+        float duration = 0.2f; // Adjust the duration of the dash
+        float startSpeed = speed;
+        float endSpeed = _dashSpeed;
 
-        yield return new WaitForSeconds(0.2f); // Adjust the duration of the dash
+        while (elapsedTime < duration)
+        {
+            // Interpolate the speed gradually
+            speed = Mathf.Lerp(startSpeed, endSpeed, elapsedTime / duration);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        // Ensure the speed reaches the final value exactly at the end
+        speed = endSpeed;
+
+        yield return new WaitForSeconds(0.40f);
 
         // Reset velocity after dash
-        speed = previousSpeed;
+        speed = startSpeed;
+
+        _isDashing = false;
 
         yield return new WaitForSeconds(_dashCooldown);
 
         _canDash = true;
     }
 
+    IEnumerator Attack()
+    {
+        _isSlashing = true;
+        // Play the attack animation
+        yield return new WaitForSeconds(0.5f);
+        _isSlashing = false;
+        yield return new WaitForSeconds(_attackCooldown);
+        _canAttack = true;
+    }
 }

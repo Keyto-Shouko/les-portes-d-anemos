@@ -12,6 +12,7 @@ TagManager:
   - Collectibles
   - SpawnArea
   - ForestArea
+  - Slime
   layers:
   - Default
   - TransparentFX
