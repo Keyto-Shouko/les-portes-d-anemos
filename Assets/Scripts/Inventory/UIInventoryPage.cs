@@ -6,17 +6,17 @@ using System;
 public class UIInventoryPage : MonoBehaviour
 {
     [SerializeField]
-    private UIInventoryItem itemPrefab;
+    private UIInventoryItem _itemPrefab;
 
     [SerializeField]
-    private RectTransform contentPanel;
+    private RectTransform _contentPanel;
 
     [SerializeField]
-    private UIInventoryDescription itemDescription;
+    private UIInventoryDescription _itemDescription;
 
     [SerializeField]
-    private MouseFollower mouseFollower;
-    List<UIInventoryItem> listOfUIItems = new List<UIInventoryItem>();
+    private MouseFollower _mouseFollower;
+    List<UIInventoryItem> _listOfUIItems = new List<UIInventoryItem>();
 
     private int _currentlyDraggedItemIndex = -1;
 
@@ -25,14 +25,14 @@ public class UIInventoryPage : MonoBehaviour
     public event Action<int, int> OnSwapItems;
     void Awake(){
         HideInventory();
-        itemDescription.ResetDescription();
-        mouseFollower.Toggle(false);
+        _itemDescription.ResetDescription();
+        _mouseFollower.Toggle(false);
     }
     public void InitializeInvetoryUI(int inventorySize){
         for(int i = 0; i < inventorySize; i++){
-            UIInventoryItem uiItem = Instantiate(itemPrefab, Vector3.zero, Quaternion.identity);
-            uiItem.transform.SetParent(contentPanel, false);
-            listOfUIItems.Add(uiItem);
+            UIInventoryItem uiItem = Instantiate(_itemPrefab, Vector3.zero, Quaternion.identity);
+            uiItem.transform.SetParent(_contentPanel, false);
+            _listOfUIItems.Add(uiItem);
 
             uiItem.OnItemClicked += HandleItemSelection;
             uiItem.OnItemBeginDrag += HandleBeginDrag;
@@ -54,26 +54,26 @@ public class UIInventoryPage : MonoBehaviour
     }
 
     private void HandleItemSelection(UIInventoryItem inventoryItemUI){
-        int index = listOfUIItems.IndexOf(inventoryItemUI);
+        int index = _listOfUIItems.IndexOf(inventoryItemUI);
         if(index == -1) return;
         OnDescriptionRequested?.Invoke(index);
 
     }
 
     public void ResetSelection(){
-        itemDescription.ResetDescription();
+        _itemDescription.ResetDescription();
         DeselectAllItems();
     }
 
     private void DeselectAllItems(){
-        foreach(UIInventoryItem item in listOfUIItems){
+        foreach(UIInventoryItem item in _listOfUIItems){
             item.Deselect();
         }
     }
 
     private void HandleBeginDrag(UIInventoryItem inventoryItemUI){
         //Debug.Log("Item begin drag");
-        int index = listOfUIItems.IndexOf(inventoryItemUI);
+        int index = _listOfUIItems.IndexOf(inventoryItemUI);
         if(index == -1) return;
         _currentlyDraggedItemIndex = index;
         HandleItemSelection(inventoryItemUI);
@@ -82,7 +82,7 @@ public class UIInventoryPage : MonoBehaviour
 
     private void HandleSwap(UIInventoryItem inventoryItemUI){
         //Debug.Log("Item dropped on");
-        int index = listOfUIItems.IndexOf(inventoryItemUI);
+        int index = _listOfUIItems.IndexOf(inventoryItemUI);
         if(index == -1) {
             return;
         }
@@ -96,20 +96,20 @@ public class UIInventoryPage : MonoBehaviour
     }
 
     private void ResetDraggedItem(){
-        mouseFollower.Toggle(false);
+        _mouseFollower.Toggle(false);
         _currentlyDraggedItemIndex = -1;
     }
 
     public void CreateDraggedItem(Sprite sprite, int quantity){
-        mouseFollower.Toggle(true);
-        mouseFollower.SetData(sprite, quantity);
+        _mouseFollower.Toggle(true);
+        _mouseFollower.SetData(sprite, quantity);
     }
 
     public void DestroyDraggedItem(){
-        mouseFollower.Toggle(false);
+        _mouseFollower.Toggle(false);
     }
     public void UpdateData(int itemIndex, Sprite sprite, int itemQuantity){
-        if(listOfUIItems.Count > itemIndex) listOfUIItems[itemIndex].SetData(sprite, itemQuantity);
+        if(_listOfUIItems.Count > itemIndex) _listOfUIItems[itemIndex].SetData(sprite, itemQuantity);
     }
     private void HandleRShowItemActions(UIInventoryItem inventoryItemUI){
         //Debug.Log("Item right click");
@@ -117,13 +117,13 @@ public class UIInventoryPage : MonoBehaviour
 
     internal void UpdateDescription(int itemIndex, Sprite itemImage, string name, string description)
     {
-        itemDescription.SetDescription(itemImage, name, description);
+        _itemDescription.SetDescription(itemImage, name, description);
         DeselectAllItems();
-        listOfUIItems[itemIndex].Select();
+        _listOfUIItems[itemIndex].Select();
     }
 
     public void ResetAllItems(){
-        foreach(UIInventoryItem item in listOfUIItems){
+        foreach(UIInventoryItem item in _listOfUIItems){
             item.ResetData();
             item.Deselect();
         }

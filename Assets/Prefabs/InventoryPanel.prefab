@@ -394,13 +394,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9ae2d141322e14cba14cff2b82f545, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 1416157876886139541, guid: 53bbdcad3e22f8448b156b3288bc5081, type: 3}
-  contentPanel: {fileID: 7016931133458213445}
-  itemDescription: {fileID: 3014349567246946447}
-  image: {fileID: 793172594, guid: a03c2610221b14940b818fb271b448fa, type: 3}
-  quantity: 1
-  title: Banana
-  description: Delicious banana
+  _itemPrefab: {fileID: 1416157876886139541, guid: 53bbdcad3e22f8448b156b3288bc5081, type: 3}
+  _contentPanel: {fileID: 7016931133458213445}
+  _itemDescription: {fileID: 3014349567246946447}
+  _mouseFollower: {fileID: 0}
 --- !u!1 &2181008201344483524
 GameObject:
   m_ObjectHideFlags: 0
@@ -980,8 +977,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 844971087101692965}
   m_HandleRect: {fileID: 8786183891296096159}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 0.99999994
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

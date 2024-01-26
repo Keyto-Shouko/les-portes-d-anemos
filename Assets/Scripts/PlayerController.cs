@@ -31,9 +31,9 @@ public class PlayerController : MonoBehaviour
     private AudioSource _audioSource;
 
     [SerializeField]
-    private List<AudioClipEntry> audioClipEntries;
+    private List<AudioClipEntry> _audioClipEntries;
 
-    private Dictionary<string, AudioClip> audioClipDictionary;
+    private Dictionary<string, AudioClip> _audioClipDictionary;
 
     [System.Serializable]
     public class AudioClipEntry
@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
     }
 
     [SerializeField]
-    private InventorySO inventoryData;
+    private InventorySO _inventoryData;
 
     private void Awake()
     {
@@ -53,10 +53,10 @@ public class PlayerController : MonoBehaviour
         _audioSource = GetComponent<AudioSource>();
 
         // Initialize the dictionary from the list
-        audioClipDictionary = new Dictionary<string, AudioClip>();
-        foreach (var entry in audioClipEntries)
+        _audioClipDictionary = new Dictionary<string, AudioClip>();
+        foreach (var entry in _audioClipEntries)
         {
-            audioClipDictionary[entry.clipName] = entry.clip;
+            _audioClipDictionary[entry.clipName] = entry.clip;
         }
         
         // Debug log to check if _playerManager is assigned
@@ -186,7 +186,7 @@ public class PlayerController : MonoBehaviour
         else if(other.gameObject.CompareTag("Collectibles")){
            Item item = other.GetComponent<Item>();
            if(item != null){
-                int reminder = inventoryData.AddItem(item.InventoryItem, item.Quantity);
+                int reminder = _inventoryData.AddItem(item.InventoryItem, item.Quantity);
                 if(reminder == 0){
                     item.DestroyItem();
                 }
@@ -238,9 +238,9 @@ public class PlayerController : MonoBehaviour
 
     void PlayAudioClip(string clipName)
     {
-        if (_audioSource != null && audioClipDictionary.ContainsKey(clipName))
+        if (_audioSource != null && _audioClipDictionary.ContainsKey(clipName))
         {
-            AudioClip clip = audioClipDictionary[clipName];
+            AudioClip clip = _audioClipDictionary[clipName];
             _audioSource.clip = clip;
             _audioSource.Play();
         }

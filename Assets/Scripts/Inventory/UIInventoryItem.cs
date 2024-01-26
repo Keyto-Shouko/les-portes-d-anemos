@@ -20,7 +20,7 @@ public class UIInventoryItem : MonoBehaviour, IPointerClickHandler, IBeginDragHa
 
     public event Action<UIInventoryItem> OnItemClicked, OnItemDroppedOn, OnItemBeginDrag, OnItemEndDrag, OnRightMousBtnClick;
 
-    private bool empty = true;
+    private bool _empty = true;
 
 
     void Awake(){
@@ -41,7 +41,7 @@ public class UIInventoryItem : MonoBehaviour, IPointerClickHandler, IBeginDragHa
 
     public void ResetData(){
         this._itemImage.gameObject.SetActive(false);
-        empty = true;
+        _empty = true;
     }
 
     public void Deselect(){
@@ -52,7 +52,7 @@ public class UIInventoryItem : MonoBehaviour, IPointerClickHandler, IBeginDragHa
         this._itemImage.gameObject.SetActive(true);
         this._itemImage.sprite = sprite;
         this._quantityText.text = quantity+ "";
-        empty = false;
+        _empty = false;
     }
 
     public void Select(){
@@ -60,12 +60,12 @@ public class UIInventoryItem : MonoBehaviour, IPointerClickHandler, IBeginDragHa
     }
 
     public void OnBeginDrag(PointerEventData eventData){
-        if(empty) return;
+        if(_empty) return;
         OnItemBeginDrag?.Invoke(this);
     }
 
     public void OnEndDrag(PointerEventData eventData){
-        if(empty) return;
+        if(_empty) return;
         OnItemEndDrag?.Invoke(this);
     }
 

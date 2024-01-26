@@ -5,17 +5,17 @@ using UnityEngine;
 public class MouseFollower : MonoBehaviour
 {
    [SerializeField]
-   private Canvas canvas;
+   private Canvas _canvas;
    [SerializeField]
-   private Camera mainCam;
+   private Camera _mainCam;
 
    [SerializeField]
-   private UIInventoryItem item;
+   private UIInventoryItem _item;
 
    void Awake(){
-        canvas = transform.root.GetComponent<Canvas>();
-        mainCam = Camera.main;
-        item = GetComponentInChildren<UIInventoryItem>();
+        _canvas = transform.root.GetComponent<Canvas>();
+        _mainCam = Camera.main;
+        _item = GetComponentInChildren<UIInventoryItem>();
    }
     void Start()
     {
@@ -26,12 +26,12 @@ public class MouseFollower : MonoBehaviour
     void Update()
     {
         Vector2 position;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvas.transform as RectTransform, Input.mousePosition, canvas.worldCamera, out position);
-        transform.position = canvas.transform.TransformPoint(position);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(_canvas.transform as RectTransform, Input.mousePosition, _canvas.worldCamera, out position);
+        transform.position = _canvas.transform.TransformPoint(position);
     }
 
     public void SetData(Sprite sprite, int quantity){
-        item.SetData(sprite, quantity);
+        _item.SetData(sprite, quantity);
     }
 
     public void Toggle(bool val){

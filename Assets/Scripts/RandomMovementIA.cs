@@ -7,14 +7,14 @@ public class RestrictedRandomMovement : MonoBehaviour
     public float updateInterval = 1f;
      public float speed = 0f; // Added speed field
     public Animator animator; // Added Animator field
-    private Vector2 currentPosition;
-    private Vector2 spawnPoint;
-    private Vector2 targetPosition;
+    private Vector2 _currentPosition;
+    private Vector2 _spawnPoint;
+    private Vector2 _targetPosition;
 
     private void Start()
     {
         // Set the initial spawn point
-        spawnPoint = transform.position;
+        _spawnPoint = transform.position;
 
         // Get the Animator component
         animator = GetComponent<Animator>();
@@ -26,7 +26,7 @@ public class RestrictedRandomMovement : MonoBehaviour
     private void Update()
     {
         // Move towards the target position
-        transform.position = Vector2.Lerp(transform.position, targetPosition, Time.deltaTime * 5f);
+        transform.position = Vector2.Lerp(transform.position, _targetPosition, Time.deltaTime * 5f);
 
         // Update animator parameters based on movement
         UpdateAnimatorParameters();
@@ -52,7 +52,7 @@ public class RestrictedRandomMovement : MonoBehaviour
     //log the random direction
     Vector2 nextPosition = new Vector2(transform.position.x, transform.position.y) + randomDirection;
     //log the distance
-    if (Vector2.Distance(spawnPoint, nextPosition) > maxRadius)
+    if (Vector2.Distance(_spawnPoint, nextPosition) > maxRadius)
     {
         // If it is, we invert the direction
         //log if we are inverting the direction
@@ -62,17 +62,17 @@ public class RestrictedRandomMovement : MonoBehaviour
     }
 
     // Move towards the target position
-    targetPosition = nextPosition;
+    _targetPosition = nextPosition;
 }
 
 private void UpdateAnimatorParameters()
     {
         // Determine the direction of movement
-        float horizontal = targetPosition.x - transform.position.x;
-        float vertical = targetPosition.y - transform.position.y;
+        float horizontal = _targetPosition.x - transform.position.x;
+        float vertical = _targetPosition.y - transform.position.y;
         //check if the current position is different from the target position, if so we are moving
         // if it's not we set the speed to 0
-        if (Vector2.Distance(transform.position, targetPosition) > 0.1f)
+        if (Vector2.Distance(transform.position, _targetPosition) > 0.1f)
         {
             speed = 1;
         } else {

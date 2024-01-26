@@ -11,7 +11,7 @@ public class Teleporter : MonoBehaviour
     public AudioClip activationClip;
     public string name;
     public string description;
-    private Vector2 position;
+    private Vector2 _position;
     
     void Awake()
     {
@@ -20,7 +20,7 @@ public class Teleporter : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        position = transform.position;
+        _position = transform.position;
     }
 
     // Update is called once per frame
@@ -35,8 +35,8 @@ public class Teleporter : MonoBehaviour
         }
     }
 
-    //acces the position of the teleporter
+    //acces the _position of the teleporter
     public Vector2 GetPosition(){
-        return position;
+        return _position;
     }
 }

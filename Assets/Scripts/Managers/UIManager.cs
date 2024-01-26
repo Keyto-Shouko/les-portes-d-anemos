@@ -24,12 +24,12 @@ public class UIManager : MonoBehaviour
     public GameObject teleporterListPanel;
 
     [SerializeField] 
-    private Transform teleporterContainer;
+    private Transform _teleporterContainer;
 
     [SerializeField]
-    private GameObject teleporterScrollViewItemPrefab;
+    private GameObject _teleporterScrollViewItemPrefab;
 
-    private int teleporterCount;
+    private int _teleporterCount;
     private GameManager _gameManager;
 
     // listen to the event that comes from the playerManager
@@ -75,10 +75,10 @@ public class UIManager : MonoBehaviour
 
     public void AddTeleporterToUIList(Teleporter discoveredTeleporter){
         // Instantiate the teleporter UI item
-        var newTeleporterToAdd = Instantiate(teleporterScrollViewItemPrefab);
+        var newTeleporterToAdd = Instantiate(_teleporterScrollViewItemPrefab);
         Debug.Log("newTeleporterToAdd: " + discoveredTeleporter.GetPosition());
         // Set the instantiated item's parent to the content container
-        newTeleporterToAdd.transform.SetParent(teleporterContainer);
+        newTeleporterToAdd.transform.SetParent(_teleporterContainer);
         TextMeshProUGUI[] textFields = newTeleporterToAdd.GetComponentsInChildren<TextMeshProUGUI>();
         // Assuming the order of TextMeshProUGUI components in the array corresponds to the order in your prefab
         // Update the content of the TextMeshPro fields with the information from the discovered teleporter
