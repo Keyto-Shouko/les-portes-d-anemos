@@ -7,6 +7,8 @@ public class HealthManager : MonoBehaviour
     public Transform pfHealthBar;
     public Vector2 offset;
 
+    // Public field for the health so i can adjust it in editor
+    public int health = 100;
     private HealthSystem _healthSystem;
     private HealthBar _healthBar; // Store a reference to the health bar
 
@@ -20,7 +22,7 @@ public class HealthManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _healthSystem = new HealthSystem(100, gameObject);
+        _healthSystem = new HealthSystem(health, gameObject);
 
         // Add each component separately
         Vector2 finalPosition = new Vector2(gameObject.transform.position.x + offset.x, gameObject.transform.position.y + offset.y);

@@ -105,7 +105,7 @@ public class PlayerController : MonoBehaviour
 
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0) && _canAttack && _movement == Vector2.zero && _lastMoveDirection != Vector2.zero && _isDashing == false && _isSlashing == false)
+        if (Input.GetKeyDown(KeyCode.Mouse0) && _canAttack && _lastMoveDirection != Vector2.zero && _isDashing == false && _isSlashing == false)
         {
             StartCoroutine(Attack());
         }
@@ -282,11 +282,16 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Attack()
     {
+        //reduce speed to 0
+        var oldSpeed = speed;
+        speed = 0f;
         _isSlashing = true;
         // Play the attack animation
         yield return new WaitForSeconds(0.5f);
         _isSlashing = false;
+        speed = oldSpeed;
         yield return new WaitForSeconds(_attackCooldown);
         _canAttack = true;
+        
     }
 }
