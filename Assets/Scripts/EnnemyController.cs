@@ -66,5 +66,6 @@ public class EnnemyController : MonoBehaviour {
         // call the SetupSpeed function on the bullet
         bullet.GetComponent<BulletController>().SetupSpeed(_attackDictionary["Life Sentence"].projectileSpeed);
         bullet.GetComponent<BulletController>().SetupDamage(_attackDictionary["Life Sentence"].damage);
+        bullet.GetComponent<BulletController>().SetupShooter(gameObject);
     }
 }

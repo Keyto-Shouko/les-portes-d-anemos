@@ -8,6 +8,8 @@ public class BulletController : MonoBehaviour
     private GameObject _player;
     private Rigidbody2D _rigidbody2D;
 
+    //get a reference to the GameObject that instantiated the bullet
+    private GameObject _shooter;
     private float _speed;
     private int _damage;
     private float timer;
@@ -38,10 +40,13 @@ public class BulletController : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
+        
+        if(other.gameObject != _shooter){
             Destroy(gameObject);
+        }
         // damage the entity
         var entityHealthSystem = other.gameObject.GetComponent<HealthManager>().GetHealthSystem();
-        if(entityHealthSystem != null){
+        if(entityHealthSystem != null && other.gameObject != _shooter){
             other.gameObject.GetComponent<HealthManager>().GetHealthSystem().Damage(_damage);
             Destroy(gameObject);
         }
@@ -53,5 +58,9 @@ public class BulletController : MonoBehaviour
 
     public void SetupDamage(int damage){
         _damage = damage;
+    }
+
+    public void SetupShooter(GameObject shooter){
+        _shooter = shooter;
     }
 }
