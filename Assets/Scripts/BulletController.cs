@@ -40,8 +40,8 @@ public class BulletController : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        
-        if(other.gameObject != _shooter){
+        //check if the bullet enters a sound area or the shooter hitbox
+        if(other.gameObject != _shooter && other.tag != "Area"){
             Destroy(gameObject);
         }
         // damage the entity

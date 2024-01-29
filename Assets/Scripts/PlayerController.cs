@@ -196,11 +196,8 @@ public class PlayerController : MonoBehaviour
            }
         }
         //detect if player enters the "spawnArea" and play the sound
-        else if(other.gameObject.CompareTag("SpawnArea")){
-            PlayAudioClip("SpawnAmbiance");
-        }
-        else if (other.gameObject.CompareTag("ForestArea")){
-            PlayAudioClip("ForestAmbiance");
+        else if(other.gameObject.CompareTag("Area")){
+            PlayAudioClip(other.gameObject.name);
         }
 
         //detect if player enters the slime hitbox and damage the player
