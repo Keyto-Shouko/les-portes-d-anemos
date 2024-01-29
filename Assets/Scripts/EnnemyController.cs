@@ -1,11 +1,14 @@
-using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class EnnemyController : MonoBehaviour {
 
     private Animator _animator;
 
     private GameObject _player;
+
+    private AudioSource _audioSource;
     [SerializeField]
     private List<AttackEntry> _attackEntries;
 
@@ -22,6 +25,7 @@ public class EnnemyController : MonoBehaviour {
         public string name;
         public bool projectile;
         public GameObject projectilePrefab;
+        public AudioClip audioClip;
         public float projectileSpeed;
         public bool AoE;
         public int damage;
@@ -37,6 +41,8 @@ public class EnnemyController : MonoBehaviour {
         }
 
         _animator = GetComponent<Animator>();
+        // audiosource
+        _audioSource = GetComponent<AudioSource>();
     }
 
     // Example function to trigger attacks
@@ -60,12 +66,20 @@ public class EnnemyController : MonoBehaviour {
         Debug.Log("Judgement !");
     }
 
-    public void LifeSentence() {
+    IEnumerator LifeSentence() {
         Debug.Log("Life Sentence !");
+        // play the sound on the audio source of the ennemy
+        AudioClip clip = _attackDictionary["Life Sentence"].audioClip;
+        _audioSource.clip = clip;
+        _audioSource.Play();
+        //wait for the windup then instantiate the bullet
+        yield return new WaitForSeconds(_attackDictionary["Life Sentence"].windup);
         var bullet = Instantiate(_attackDictionary["Life Sentence"].projectilePrefab, transform.position, Quaternion.identity);
         // call the SetupSpeed function on the bullet
         bullet.GetComponent<BulletController>().SetupSpeed(_attackDictionary["Life Sentence"].projectileSpeed);
         bullet.GetComponent<BulletController>().SetupDamage(_attackDictionary["Life Sentence"].damage);
         bullet.GetComponent<BulletController>().SetupShooter(gameObject);
+
+        
     }
 }

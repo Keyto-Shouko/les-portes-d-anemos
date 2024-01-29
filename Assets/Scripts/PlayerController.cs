@@ -271,7 +271,7 @@ public class PlayerController : MonoBehaviour
         speed = startSpeed;
 
         _isDashing = false;
-
+        // stop the coroutine for the dash
         yield return new WaitForSeconds(_dashCooldown);
 
         _canDash = true;
