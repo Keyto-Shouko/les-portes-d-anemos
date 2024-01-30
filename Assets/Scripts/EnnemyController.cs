@@ -14,6 +14,9 @@ public class EnnemyController : MonoBehaviour {
 
     private Dictionary<string, Attack> _attackDictionary;
 
+    //get a reference to the GameObject that instantiated the bullet
+
+
     [System.Serializable]
     public class AttackEntry {
         public string attackName;
@@ -43,6 +46,7 @@ public class EnnemyController : MonoBehaviour {
         _animator = GetComponent<Animator>();
         // audiosource
         _audioSource = GetComponent<AudioSource>();
+        _player = GameObject.FindGameObjectWithTag("Player");
     }
 
     // Example function to trigger attacks
@@ -62,8 +66,19 @@ public class EnnemyController : MonoBehaviour {
         }
     }
 
-    public void Judgement() {
+    IEnumerator Judgement() {
         Debug.Log("Judgement !");
+        // play the sound on the audio source of the ennemy
+        AudioClip clip = _attackDictionary["Judgement"].audioClip;
+        _audioSource.clip = clip;
+        _audioSource.Play();
+        var bullet = Instantiate(_attackDictionary["Judgement"].projectilePrefab, _player.transform.position, Quaternion.identity);
+        bullet.GetComponent<AoEController>().SetupDamage(_attackDictionary["Judgement"].damage);
+        bullet.GetComponent<AoEController>().SetupCaster(gameObject);
+        bullet.GetComponent<AoEController>().SetupCollisionLayer(gameObject.layer);
+        bullet.GetComponent<AoEController>().SetupWindup(_attackDictionary["Judgement"].windup);
+        //return
+        yield return null;
     }
 
     IEnumerator LifeSentence() {
@@ -79,7 +94,6 @@ public class EnnemyController : MonoBehaviour {
         bullet.GetComponent<BulletController>().SetupSpeed(_attackDictionary["Life Sentence"].projectileSpeed);
         bullet.GetComponent<BulletController>().SetupDamage(_attackDictionary["Life Sentence"].damage);
         bullet.GetComponent<BulletController>().SetupShooter(gameObject);
-
-        
+        bullet.GetComponent<BulletController>().SetupCollisionLayer(gameObject.layer);     
     }
 }

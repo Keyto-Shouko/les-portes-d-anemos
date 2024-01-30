@@ -47,7 +47,7 @@ public class HealthSystem {
         LootBag lootBag = gameObject.GetComponent<LootBag>();
         if (lootBag != null){
             lootBag.GetComponent<LootBag>().InstantiateLoot(gameObject.transform.position);
-            GameObject.Destroy(gameObject);
         }
+        GameObject.Destroy(gameObject);
     }
 }

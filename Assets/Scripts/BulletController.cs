@@ -40,16 +40,23 @@ public class BulletController : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
+        //check if the bullet GameObject hasn't already been destroyed
+        if(gameObject == null){
+            return;
+        }
         //check if the bullet enters a sound area or the shooter hitbox
-        if(other.gameObject != _shooter && other.tag != "Area"){
+        if(_shooter != null && other.gameObject != _shooter && other.tag != "Area" && other.tag != "Untagged"){
             Destroy(gameObject);
         }
-        // damage the entity
-        var entityHealthSystem = other.gameObject.GetComponent<HealthManager>().GetHealthSystem();
-        if(entityHealthSystem != null && other.gameObject != _shooter){
-            other.gameObject.GetComponent<HealthManager>().GetHealthSystem().Damage(_damage);
-            Destroy(gameObject);
+        // Damage the entity
+        var entityHealthManager = other.gameObject.GetComponent<HealthManager>();
+        if (entityHealthManager != null && other.gameObject != _shooter) {
+            HealthSystem entityHealthSystem = entityHealthManager.GetHealthSystem();
+            if (entityHealthSystem != null) {
+                entityHealthSystem.Damage(_damage);
+                Destroy(gameObject);
         }
+    }
     }
 
     public void SetupSpeed(float speed){
@@ -62,5 +69,9 @@ public class BulletController : MonoBehaviour
 
     public void SetupShooter(GameObject shooter){
         _shooter = shooter;
+    }
+
+    public void SetupCollisionLayer(int layer){
+        gameObject.layer = layer;
     }
 }

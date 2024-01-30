@@ -106,6 +106,7 @@ MonoBehaviour:
       name: LifeSentence
       projectile: 1
       projectilePrefab: {fileID: 879056447217441181, guid: ec4528461e2291b4c9532904432fa44d, type: 3}
+      audioClip: {fileID: 0}
       projectileSpeed: 20
       AoE: 0
       damage: 15
@@ -117,6 +118,7 @@ MonoBehaviour:
       name: Judgement
       projectile: 0
       projectilePrefab: {fileID: 0}
+      audioClip: {fileID: 0}
       projectileSpeed: 0
       AoE: 1
       damage: 20

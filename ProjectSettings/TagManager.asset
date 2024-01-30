@@ -12,6 +12,7 @@ TagManager:
   - Collectibles
   - Slime
   - Area
+  - Chest
   layers:
   - Default
   - TransparentFX

@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     private float _dashSpeed = 10f;
 
     private bool _canAttack = true;
+
+    private bool _canOpenChest = false;
     public float _attackCooldown = 0.6f;
     private PlayerManager _playerManager;
 
@@ -44,6 +46,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private InventorySO _inventoryData;
+
+    private GameObject _interactableObject;
 
     private void Awake()
     {
@@ -80,6 +84,7 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        
         Move();
     }
 
@@ -111,10 +116,15 @@ public class PlayerController : MonoBehaviour
         }
 
         //if the player is in the teleporter area and press F, we need to send an event to the teleporter event manager
-        if (_isInTPArea && Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F))
         {
-            // Make the UIManager open the teleporter list
-            UIManager.Instance.ToggleTeleporterList();
+            if(_isInTPArea){
+                // Make the UIManager open the teleporter list
+                UIManager.Instance.ToggleTeleporterList();
+            } else if (_canOpenChest){
+                //open the chest
+                OpenChest(_interactableObject);
+            }
         }
         
 
@@ -207,6 +217,11 @@ public class PlayerController : MonoBehaviour
                 healthManager.GetHealthSystem().Damage(10);
             }
         }
+        else if (other.gameObject.CompareTag("Chest")){
+            //set a reference to the gameObject 
+            _interactableObject = other.gameObject;
+            _canOpenChest = true;
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
@@ -216,13 +231,16 @@ public class PlayerController : MonoBehaviour
             _isInTPArea = false;
             UIManager.Instance.CloseTeleporterList();
         }
+        else if (other.gameObject.CompareTag("Chest")){
+            //set a reference to the gameObject 
+            _interactableObject = null;
+            _canOpenChest = false;
+        }
     }
 
     void OnTriggerStay2D(Collider2D other)
     {
-        /*if(other.gameObject.CompareTag("Collectible") && KeyDown(KeyCode.F)){
-            //_playerManager.CollectItem(other.gameObject);
-        }*/
+        
     }
     void ChangePlayerLayer(GameObject player, string layerName, string sortingLayerName = "Default")
     {
@@ -290,5 +308,16 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(_attackCooldown);
         _canAttack = true;
         
+    }
+
+    public void OpenChest(GameObject chest){
+        // get the loot bag component
+        LootBag lootBag = chest.gameObject.GetComponent<LootBag>();
+        //also get the animator component and sets the "OpenChest" trigger to true
+        Animator animator = chest.gameObject.GetComponent<Animator>();
+        if(lootBag != null && animator != null){
+            animator.SetTrigger("OpenChest");
+            lootBag.InstantiateLoot(chest.gameObject.transform.position, 1.1f);
+        }
     }
 }
