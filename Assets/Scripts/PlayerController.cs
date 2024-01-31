@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
 
     private bool _canCollect = false;
     private bool _canDash = true;
-    private float _dashCooldown = 6f;
+    private float _dashCooldown = 4f;
     private float _dashSpeed = 10f;
 
     private bool _canAttack = true;
@@ -124,6 +124,8 @@ public class PlayerController : MonoBehaviour
             } else if (_canOpenChest){
                 //open the chest
                 OpenChest(_interactableObject);
+                //security measure to avoid opening the chest multiple times
+                _canOpenChest = false;
             }
         }
         
@@ -317,6 +319,7 @@ public class PlayerController : MonoBehaviour
         Animator animator = chest.gameObject.GetComponent<Animator>();
         if(lootBag != null && animator != null){
             animator.SetTrigger("OpenChest");
+            //instantiate the loot only once
             lootBag.InstantiateLoot(chest.gameObject.transform.position, 1.1f);
         }
     }

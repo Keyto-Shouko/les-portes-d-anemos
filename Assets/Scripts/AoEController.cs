@@ -43,11 +43,11 @@ public class AoEController : MonoBehaviour
     IEnumerator ActivateColliderAfterWindup()
     {
         // Wait for the windup duration
-        yield return new WaitForSeconds(_windup+0.5f);
+        yield return new WaitForSeconds(_windup+0.3f);
 
         // Activate the circle collider after the windup
         GetComponent<CircleCollider2D>().enabled = true;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.2f);
         Destroy(gameObject);
     }
 

@@ -70,13 +70,15 @@ public class EnnemyController : MonoBehaviour {
         Debug.Log("Judgement !");
         // play the sound on the audio source of the ennemy
         AudioClip clip = _attackDictionary["Judgement"].audioClip;
-        _audioSource.clip = clip;
-        _audioSource.Play();
+        
         var bullet = Instantiate(_attackDictionary["Judgement"].projectilePrefab, _player.transform.position, Quaternion.identity);
         bullet.GetComponent<AoEController>().SetupDamage(_attackDictionary["Judgement"].damage);
         bullet.GetComponent<AoEController>().SetupCaster(gameObject);
         bullet.GetComponent<AoEController>().SetupCollisionLayer(gameObject.layer);
         bullet.GetComponent<AoEController>().SetupWindup(_attackDictionary["Judgement"].windup);
+        _audioSource.clip = clip;
+        _audioSource.Play();
+        
         //return
         yield return null;
     }
